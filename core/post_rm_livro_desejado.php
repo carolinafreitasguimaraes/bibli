@@ -1,4 +1,4 @@
-<?php require_once('../includes/valida_login.php');//?>
+<?php require_once('../includes/valida_login.php');?> 
 <?php
 require_once '../includes/funcoes.php';
 require_once 'conexao_mysql.php';
@@ -13,20 +13,18 @@ foreach ($_GET as $indice => $dado) {
     $$indice = limparDados($dado);
 }
 
-switch ($acao) {
-    case 'insert':
+if (isset($id)) {
+    $criterio = [
+        ['id', '=', $id],
+        [' AND ', 'usuario_id', '=', $_SESSION['login']['usuario']['id']]
+    ];
 
-        $dados = [
-            'texto' => $texto,
-            'usuario_id' => $_SESSION['login']['usuario']['id']
-        ];
-
-        insere(
-            'comentario',
-            $dados
-        );
-
-        break;
+    deleta(
+        'usuario_livros_desejados',
+        $criterio
+    );
+    header('Location: ../livros_desejados.php?msg=removido_sucesso');
+    exit;
 }
 
 if ($_SESSION['erros']) {
@@ -35,4 +33,4 @@ if ($_SESSION['erros']) {
         //header('Location: ../cadastro.php?erro=email_duplicado');
     }
 }
- header('Location: ../pagina_principal.php');
+ header('Location: ../livros_desejados.php');

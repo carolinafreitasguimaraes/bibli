@@ -15,6 +15,9 @@
         <?php if (isset($_GET['erro']) && $_GET['erro']=='usuario_nao_logado'): ?>
             <p>Usuário não logado</p>
         <?php endif; ?>
+        <?php if (isset($_GET['msg']) && $_GET['msg']=='cadastro_sucesso'): ?>
+            <p>Cadastro realizado com sucesso! Faça o login</p>
+        <?php endif; ?>
         <form method="post" action="core/post_login.php">
             <input type="hidden" name="acao" value="login">
             

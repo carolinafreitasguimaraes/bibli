@@ -1,17 +1,16 @@
 <?php require_once('includes/valida_login.php');//?> 
 
 <?php
-$titulo = 'Página Principal';
-$pagina = 'pagina_principal';
+$titulo = 'Meus Livros';
 $menu = [
     [
         'label' => 'Livros',
-        'link' => '#products'
+        'link' => 'pagina_principal.php#products'
     ],
     [
         'label' => 'Comentários',
-        'link' => '#review'
-    ]
+        'link' => 'pagina_principal.php#review'
+    ],
 ];
 ?>
 <?php require_once ('includes/header.php');?>
@@ -38,11 +37,12 @@ $menu = [
 
                 $criterio = [
                    // ['data_postagem', '<=', $data_atual]
+                   //['usuario_id', '=', $_SESSION['login']['usuario']['id']]
                 ];
 
                 if (!empty($busca)) {
                     $criterio[] = [
-                        //'AND',
+                       // 'AND',
                         'titulo',
                         'like',
                         // like é para buscar em qualquer parte do post.
@@ -54,26 +54,30 @@ $menu = [
                 $qtd = $qtd ?? 9;
 
                 $livros = buscar(
-                    'livro',
+                    'usuario_livros_desejados',
                     [
-                        'titulo',
-                        'imagem', 
-                        'data_criacao',
-                        'id',
+                        'livro.titulo',
+                        'livro.imagem', 
+                        'usuario_livros_desejados.data_criacao',
+                        'usuario_livros_desejados.id',
                         ' (select nome 
                                 from usuario
-                                where usuario.id = livro.usuario_id) as nome'
+                                where usuario.id = usuario_livros_desejados.usuario_id) as nome'
                     ],
                     $criterio,
-                    'data_criacao DESC ' . ' LIMIT ' . $qtd,
+                    'usuario_livros_desejados.data_criacao DESC ' . ' LIMIT ' . $qtd,
+                    'INNER JOIN livro ON livro.id = usuario_livros_desejados.livro_id AND usuario_livros_desejados.usuario_id = ' . $_SESSION['login']['usuario']['id']
                 );
                 ?>
 
     <div class="container">
-        <?php if (isset($_GET['msg']) && $_GET['msg']=='login_sucesso'): ?>
-           <center> <h2>Seja bem-vindo(a)!</h2></center>
+        <?php if (isset($_GET['msg']) && $_GET['msg']=='sucesso'): ?>
+          <h2 style="margin-left: auto; margin-right: auto;">Livro adicionado com sucesso!</h2>
         <?php endif; ?>
-        <form action="pagina_principal.php" method="get">
+        <?php if (isset($_GET['msg']) && $_GET['msg']=='removido_sucesso'): ?>
+          <h2 style="margin-left: auto; margin-right: auto;">Livro removido com sucesso!</h2>
+        <?php endif; ?>
+        <form action="livros_desejados.php" method="get">
             <div class="input-group mb-3">
                 <input type="text" name="busca" value="<?=isset($busca) ? $busca : ''; ?>" class="form-control" placeholder="Pesquisar Livro" aria-label="Pesquisar Livro" aria-describedby="button-addon2">
                 <button class="btn btn-success" type="button" id="button-addon2"><i class="bi bi-search"></i></button>
@@ -84,6 +88,10 @@ $menu = [
         <br/>
         <br/>
     <div class="box-container">
+
+    <?php if (empty($livros)): ?>
+        <h2 style="margin-left: auto; margin-right: auto;">Livro não cadastrado nos seus livros</h2>
+    <?php endif; ?>
 
     <?php
         foreach ($livros as $livro) :
@@ -96,8 +104,8 @@ $menu = [
             <div class="image">
                 <img src="<?= 'uploads/'.$livro['imagem']; ?>" alt="">
                 <div class="icons">
+                    <a href="core/post_rm_livro_desejado.php?id=<?=$livro['id'];?>" class="fas fa-trash-alt"></a>
                     <a href="core/post_add_livro.php?livro_id=<?=$livro['id'];?>" class="fas fa-book-open"></a>
-                    <a href="core/post_add_livro_desejado.php?livro_id=<?=$livro['id'];?>" class="fas fa-heart"></a>
                  
                 </div>
             </div>
@@ -107,13 +115,12 @@ $menu = [
             </div>
         </div>
     <?php endforeach; ?>
-    
     </div>
 
     <br>
     <br> 
     <div id="carregar_mais"> 
-        <center> <a href="pagina_principal.php?qtd=<?=$qtd+9;?>#carregar_mais" class="my-btn">Carregar Mais</a></center> 
+        <center> <a href="livros_desejados.php?qtd=<?=$qtd+9;?>#carregar_mais" class="my-btn">Carregar Mais</a></center> 
     </div>
 
 </section>

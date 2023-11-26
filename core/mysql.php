@@ -142,7 +142,8 @@ function buscar(
     string $entidade,
     array $campos = ['*'],
     array $criterio = [],
-    string $ordem = null
+    string $ordem = null,
+    string $join = null
 ): array {
     $retorno = false;
     $coringa_criterio = [];
@@ -165,8 +166,8 @@ function buscar(
         $$nome_campo = $dado;
     }
 
-    $instrucao = select($entidade, $campos, $coringa_criterio, $ordem);
-
+    $instrucao = select($entidade, $campos, $coringa_criterio, $ordem, $join);
+    //var_dump($instrucao); exit;
     $conexao = conecta();
 
     $stmt = mysqli_prepare($conexao, $instrucao);

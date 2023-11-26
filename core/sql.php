@@ -41,12 +41,14 @@ function delete(string $entidade, array $criterio = []): String
             $instrucao .= ' ' . implode(' ', $expressao);
         }
     }
+    //var_dump($instrucao); exit;
     return $instrucao;
 }
-function  select(string $entidade, array $campos, array $criterio = [], string $ordem = null): string
+function  select(string $entidade, array $campos, array $criterio = [], string $ordem = null, string $join = null): string
 {
     $instrucao = " SELECT " . implode(',', $campos);
     $instrucao .= " FROM {$entidade}";
+    $instrucao .= " {$join} ";
 
     if (!empty($criterio)) {
         $instrucao .= ' WHERE ';

@@ -1,4 +1,29 @@
+<?php session_start();?> 
+
+<?php
+$titulo = 'Página Inicial';
+$pagina = 'index';
+$menu = [
+    [
+        'label' => 'Início',
+        'link' => 'index.php'
+    ],
+    [
+        'label' => 'Sobre',
+        'link' => '#about'
+    ],
+    [
+        'label' => 'Livros',
+        'link' => '#products'
+    ],
+    [
+        'label' => 'Comentários',
+        'link' => '#review'
+    ]
+];
+?>
 <?php require_once ('includes/header.php');?>
+<?php require_once ('includes/menu.php');?>
 
 <!-- home section starts  -->
 
@@ -36,7 +61,7 @@
             <h3>O que nós somos e fazemos?</h3>
             <p>Somos uma plataforma digital em formato de site que busca ajudá-lo a categorizar seus livros e com nosso algorítimo indicar livros de acordo com o seu gosto!</p>
             <p>Nós fazemos nosso trabalho por meio de nosso Website, venha e crie uma conta!</p>
-            <a href="login.html" class="my-btn">Criar conta</a>
+            <a href="cadastro.php" class="my-btn">Criar conta</a>
         </div>
 
     </div>
@@ -45,199 +70,90 @@
 
 <!-- about section ends -->
 
-<!-- icons section starts  -->
-
-<!--<div class="icons-container">
-
-    <section class="box-container">
-
-        <div class="box">
-            <img src="images/icon-1.png" alt="">
-            <div class="info">
-                <h3>free delivery</h3>
-                <span>on all orders</span>
-            </div>
-        </div>
-    
-        <div class="box">
-            <img src="images/icon-2.png" alt="">
-            <div class="info">
-                <h3>10 days returns</h3>
-                <span>moneyback guarantee</span>
-            </div>
-        </div> 
-    
-        <div class="box">
-            <img src="images/icon-3.png" alt="">
-            <div class="info">
-                <h3>offer & gifts</h3>
-                <span>on all orders</span>
-            </div>
-        </div>
-    
-        <div class="box">
-            <img src="images/icon-4.png" alt="">
-            <div class="info">
-                <h3>secure paymens</h3>
-                <span>protected by paypal</span>
-            </div>
-        </div>-->
-       
-    </section>
-
-</div>
-
-<!-- icons section ends -->
-
-<!-- prodcuts section starts  -->
-
+<h1 class="heading"> <span> Nossos </span> livros </h1>
 <section class="products" id="products">
 
-    <h1 class="heading"> Livros <span>favoritos</span> </h1>
+<?php
+                date_default_timezone_set('America/Sao_Paulo');
+                require_once 'includes/funcoes.php';
+                require_once 'core/conexao_mysql.php';
+                require_once 'core/sql.php';
+                require_once 'core/mysql.php';
+
+                foreach ($_GET as $indice => $dado) {
+                    $$indice = limparDados($dado);
+                }
+
+                $data_atual = date('Y-m-d H:i:s');
+                // é a forma mais fácil de ordenar uma data, pois em caso de ordenação, 
+                // o ano é o primeiro parametro a ser verificado, assim, ano>mes>dia 
+
+                // busca o horário do servidor
+
+                $criterio = [
+                   // ['data_postagem', '<=', $data_atual]
+                ];
+
+                if (!empty($busca)) {
+                    $criterio[] = [
+                        //'AND',
+                        'titulo',
+                        'like',
+                        // like é para buscar em qualquer parte do post.
+                        "%{$busca}%"
+                        // refere-se ao campo de nome busca, para ver se ele está preenchido
+                    ];
+                }
+
+                $qtd = $qtd ?? 9;
+
+                $livros = buscar(
+                    'livro',
+                    [
+                        'titulo',
+                        'imagem', 
+                        'data_criacao',
+                        'id',
+                        ' (select nome 
+                                from usuario
+                                where usuario.id = livro.usuario_id) as nome'
+                    ],
+                    $criterio,
+                    'data_criacao DESC ' . ' LIMIT ' . $qtd,
+                );
+                ?>
 
     <div class="box-container">
+
+    <?php
+        foreach ($livros as $livro) :
+            $data = date_create($livro['data_criacao']);
+            $data = date_format($data, 'd/m/Y H:i:s');
+    ?>
 
         <div class="box">
            <!-- <span class="discount">-10%</span> -->
             <div class="image">
-                <img src="images/img-1.jpg" alt="">
+                <img src="<?= 'uploads/'.$livro['imagem']; ?>" alt="">
                 <div class="icons">
+                    <a href="#" class="fas fa-book-open"></a>
                     <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
                  
                 </div>
             </div>
             <div class="content">
-                <h3>O sol é para todos</h3>
+                <h3><?= $livro['titulo']; ?></h3>
                <!--<div class="price"> $12.99 <span>$15.99</span> </div>-->
             </div>
         </div>
-
-        <div class="box">
-            <!--<span class="discount">-15%</span>-->
-            <div class="image">
-                <img src="images/img-2.jpg" alt="">
-                <div class="icons">
-                    <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
-                </div>
-            </div>
-            <div class="content">
-                <h3>A menina que roubava livros</h3>
-               <!--<div class="price"> $12.99 <span>$15.99</span> </div>-->
-            </div>
-        </div>
-
-        <div class="box">
-            <!--<span class="discount">-5%</span>-->
-            <div class="image">
-                <img src="images/img-3.jpg" alt="">
-                <div class="icons">
-                    <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
-                </div>
-            </div>
-            <div class="content">
-                <h3>O homem de giz</h3>
-               <!--<div class="price"> $12.99 <span>$15.99</span> </div>-->
-            </div>
-        </div>
-
-        <div class="box">
-           <!--<span class="discount">-20%</span>-->
-            <div class="image">
-                <img src="images/img-4.jpg" alt="">
-                <div class="icons">
-                    <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
-                </div>
-            </div>
-            <div class="content">
-                <h3>Os Mentirosos</h3>
-               <!--<div class="price"> $12.99 <span>$15.99</span> </div>-->
-            </div>
-        </div>
-
-        <div class="box">
-            <!--<span class="discount">-17%</span>-->
-            <div class="image">
-                <img src="images/img-5.jpg" alt="">
-                <div class="icons">
-                    <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
-                </div>
-            </div>
-            <div class="content">
-                <h3>Angústia</h3>
-                <!--<div class="price"> $12.99 <span>$15.99</span> </div>-->
-            </div>
-        </div>
-
-        <div class="box">
-            <!--<span class="discount">-3%</span>-->
-            <div class="image">
-                <img src="images/img-6.jpg" alt="">
-                <div class="icons">
-                    <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
-                </div>
-            </div>
-            <div class="content">
-                <h3>Quarto de despejo</h3>
-                <!--<div class="price"> $12.99 <span>$15.99</span> </div>-->
-            </div>
-        </div>
-
-        <div class="box">
-           <!--<span class="discount">-18%</span>-->
-            <div class="image">
-                <img src="images/img-7.jpg" alt="">
-                <div class="icons">
-                    <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
-                </div>
-            </div>
-            <div class="content">
-                <h3>O Pequeno Príncipe</h3>
-                <!--<div class="price"> $12.99 <span>$15.99</span> </div>-->
-            </div>
-        </div>
-
-        <div class="box">
-            <!--<span class="discount">-10%</span>-->
-            <div class="image">
-                <img src="images/img-8.jpg" alt="">
-                <div class="icons">
-                     <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
-                </div>
-            </div>
-            <div class="content">
-                <h3>Vermelho, branco e sangue azul</h3>
-               <!--<div class="price"> $12.99 <span>$15.99</span> </div>-->
-            </div>
-        </div>
-
-        <div class="box">
-            <!--<span class="discount">-5%</span>-->
-            <div class="image">
-                <img src="images/img-9.jpg" alt="">
-                <div class="icons">
-                     <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
-                </div>
-            </div>
-            <div class="content">
-                <h3>Jardim dos esquecidos</h3>
-                <!--<div class="price"> $12.99 <span>$15.99</span> </div>-->
-            </div>
-        </div>
-
+    <?php endforeach; ?>
     </div>
-
+    
+    <br>
+    <br> 
+    <div id="carregar_mais"> 
+        <center> <a href="index.php?qtd=<?=$qtd+9;?>#carregar_mais" class="my-btn">Carregar Mais</a></center> 
+    </div>
 </section>
 
-<!-- prodcuts section ends -->
-
-
-<?php require_once ('includes/footer.php');?>
+<?php require_once ('includes/footer.php');?> 

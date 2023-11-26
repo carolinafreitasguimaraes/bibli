@@ -19,33 +19,3 @@
 </head>
 <body>
 
-<!-- header section starts  -->
-
-<header>
-
-    <section class="flex">
-
-        <input type="checkbox" name="" id="toggler">
-        <label for="toggler" class="fas fa-bars"></label>
-
-        <a href="#" class="logo">Biblioteca Portatil<span>.</span></a>
-
-        <nav class="navbar">
-            <a href="#home">Inicio</a>
-            <a href="#about">Sobre</a>
-            <a href="#products">Livros</a>
-            <a href="#review">Comentários</a>
-            <a href="#contact">Contatos</a>
-        </nav>
-
-        <div class="icons">
-            <a href="#" class="fas fa-heart"></a>
-            <a href="#" class="fas fa-shopping-cart"></a>
-            <a href="#" class="fas fa-user"></a>
-        </div>
-
-    </section>
-
-</header>
-
-<!-- header section ends -->

@@ -40,10 +40,12 @@ switch($acao){
                     exit;
                     // se em algum momento a sessão expirar ou algo do tipo, ele volta para o url desejado.
                 } else {
-                    header('Location: ../pagina_principal.php?msg=Seja bem-vindo!');
+                    header('Location: ../pagina_principal.php?msg=login_sucesso');
+                    exit;
                 }
             } else {
                 header('Location: ../login.php?erro=usuario_invalido');
+                exit;
             }
         }
 
@@ -53,6 +55,7 @@ switch($acao){
         break;
 
 }
-// header ('Location: ../index.php');
+header('Location: ../login.php?erro=usuario_invalido');
+exit;
 // quando não tiver, padrão index
 ?>

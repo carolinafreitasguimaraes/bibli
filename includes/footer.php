@@ -1,11 +1,14 @@
-
+<?php if (isset($pagina)):?>
+<?php if ($pagina == 'pagina_principal' || $pagina == 'index'):?>
+    
 <!-- review section starts  -->
 
 <section class="review" id="review">
 
 <h1 class="heading"> Comentários dos<span> usuarios</span> </h1>
-
+<?php if (isset($_SESSION['login'])): ?>
 <center> <a href="cadastro_comentario.php" class="my-btn">Comentar</a></center>
+<?php endif; ?>
 <br>
 <br>
 
@@ -35,13 +38,15 @@
                 $comentarios = buscar(
                     'comentario',
                     [
-                        'texto',
-                        'nota', 
+                        'texto', 
                         'data_criacao',
                         'id',
                         ' (select nome 
                                 from usuario
-                                where usuario.id = comentario.usuario_id) as nome'
+                                where usuario.id = comentario.usuario_id) as nome',
+                        ' (select foto 
+                        from usuario
+                        where usuario.id = comentario.usuario_id) as foto'
                     ],
                     $criterio,
                     'data_criacao DESC'
@@ -54,14 +59,13 @@
             $data = date_format($data, 'd/m/Y H:i:s');
 ?>
     <div class="box">
-        <div class="stars">
-            <?php for($i=0; $i < $comentario['nota']; $i++): ?>
-                <i class="fas fa-star"></i>
-            <?php endfor;?>
-        </div>
         <p><?=$comentario['texto'];?></p>
         <div class="user">
-            <img src="images/pic-1.png" alt="">
+            <?php if (trim($comentario['foto']) !== ''): ?>
+                <img src="./uploads/<?=$comentario['foto'];?>" alt="">
+            <?php else: ?> 
+                <img src="./images/foto_padrao.jpg" alt="">
+            <?php endif; ?>
             <div class="user-info">
                 <h3><?=$comentario['nome'];?></h3>
                 <!--<span>happy customer</span>-->
@@ -79,30 +83,9 @@
 <!-- review section ends -->
 
 <!-- contact section starts  -->
+<?php endif; ?>
+<?php endif; ?>
 
-<section class="contact" id="contact">
-
-    <h1 class="heading"> <span> Enviar </span>Mensagem</h1>
-
-    <div class="row">
-
-        <form action="">
-            <input type="text" placeholder="name" class="box">
-            <input type="email" placeholder="email" class="box">
-            <input type="number" placeholder="number" class="box">
-            <textarea name="" class="box" placeholder="message" id="" cols="30" rows="10"></textarea>
-            <input type="submit" value="Mande uma mensagem" class="my-btn">
-        </form>
-
-        <div class="image">
-            <img src="images/contatos.png" alt="">
-        </div>
-
-    </div>
-
-</section>
-
-<!-- contact section ends -->
 <!-- footer section starts  -->
 
 <section class="footer">
@@ -111,27 +94,11 @@
 
         <div class="box">
             <h3>Links rápidos</h3>
-            <a href="#">Inicio</a>
-            <a href="#">Sobre</a>
-            <a href="#">Livros</a>
-            <a href="#">Comentários</a>
-            <a href="#">Contatos</a>
+            <a href="index.php#">Inicio</a>
+            <a href="index.php#about">Sobre</a>
+            <a href="#products">Livros</a>
+            <a href="#review">Comentários</a>
         </div>
-
-        <!--<div class="box">
-            <h3>extra links</h3>
-            <a href="#">my account</a>
-            <a href="#">my order</a>
-            <a href="#">my favorite</a>
-        </div>-->
-
-        <!--<div class="box">
-            <h3>locations</h3>
-            <a href="#">india</a>
-            <a href="#">USA</a>
-            <a href="#">japan</a>
-            <a href="#">france</a>
-        </div>-->
 
         <div class="box">
             <h3>Informações de contato</h3>

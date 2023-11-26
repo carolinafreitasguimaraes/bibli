@@ -20,18 +20,7 @@
             <div class="form-group">
                 <label for="texto">Texto:</label>
                 <input type="text" id="texto" name="texto" required>
-            </div>
-            <div class="form-group">
-                <label for="nota">Nota:</label>
-                <select name="nota" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-           
+            </div>           
             
             <div class="form-group">
                 <button type="submit">Publicar</button>

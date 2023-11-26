@@ -31,8 +31,8 @@
                 <button type="submit">Cadastrar</button>
                 <a href="pagina_principal.php" class="btn">Voltar</a>
                 <span class="icons">
+                    <a href="#" class="fas fa-book-open"></a>
                     <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
                 </span>
             </div>
         </form>

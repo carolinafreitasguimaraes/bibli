@@ -20,7 +20,6 @@ switch ($acao) {
         $dados = [
             'nome' => $nome,
             'email' => $email,
-            'telefone' => $telefone,
             'senha' => crypt($senha,$salt)
         ];
 
@@ -38,4 +37,4 @@ if ($_SESSION['erros']) {
         header('Location: ../cadastro.php?erro=email_duplicado');
     }
 }
-header('Location: ../pagina_principal.php');
+header('Location: ../login.php?msg=cadastro_sucesso');

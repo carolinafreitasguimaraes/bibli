@@ -14,8 +14,8 @@
         </nav>
 
         <div class="icons">
-            <a href="#" class="fas fa-heart"></a>
-            <a href="#" class="fas fa-shopping-cart"></a>
+            <a href="meus_livros.php" class="fas fa-book-open"></a>
+            <a href="livros_desejados.php" class="fas fa-heart"></a>
             <a href="meu_perfil.php" class="fas fa-user"></a>
         </div>
 
